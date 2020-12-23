@@ -50,6 +50,15 @@
                     "optional": true
                   },
                   {
+                    "name": "angle",
+                    "importance": "low",
+                    "type": "number",
+                    "widget": "none",
+                    "min": 0,
+                    "max": 359,
+                    "optional": true
+                  },
+                  {
                     "name": "action",
                     "type": "library",
                     "importance": "high",

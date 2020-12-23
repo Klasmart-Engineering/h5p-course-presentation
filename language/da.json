@@ -13,6 +13,7 @@
                     {},
                     {},
                     {},
+                    {},
                     {
                       "label": "Kommentarer",
                       "description": "Kommentarer vises når brugeren får vist forslåede svar på alle slides."

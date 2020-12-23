@@ -95,6 +95,66 @@ export const addClickAndKeyboardListeners = function ($element, callback, scope)
 };
 
 /**
+ * Adjust size of inner element to outer element.
+ *
+ * When rotating the element-outer element, it will not fit into the
+ * parent container and sides will be cut off. Solution in fitElement:
+ * 1) Scale the parent to be large enough to take element-outer and use percentage as unit
+ * 2) As element outer will scale up (width and height of 100%), so scale it down
+ * 3) Fix scaling and positioning of element-inner element caused by scaling element-outer element
+ *
+ * @param {H5P.jQuery} $inner Inner element to fit into outer element.
+ * @param {H5P.jQuery} $outer Outer element.
+ */
+export const fitElement = function($inner, $outer) {
+  setTimeout(() => {
+    // Store initial sizes
+    const outerHullSize = getHullSize($outer);
+    const innerHullSize = getHullSize($inner);
+
+    $outer.css({
+      width: `${innerHullSize.width * parseFloat($outer[0].style.width) / $outer[0].offsetWidth}%`,
+      height: `${innerHullSize.height * parseFloat($outer[0].style.height) / $outer[0].offsetHeight}%`
+    });
+
+    // Compute scale percentage of inner element in relation to outer element
+    const scale = {
+      width: outerHullSize.width / innerHullSize.width,
+      height: outerHullSize.height / innerHullSize.height
+    }
+
+    // Scale inner element to fit parent element
+    $inner.css({
+      transform: `${$inner[0].style.transform} scale(${scale.width}, ${scale.height})`
+    });
+
+    // Update content (revert scaling and sizing of parent)
+    const $content = $inner.find('.h5p-element-inner');
+    $content.css({
+      transform: `${$content[0].style.transform} scale(${1 / scale.width}, ${1 / scale.height})`,
+      transformOrigin: '0 0',
+      width: `${scale.width * 100}%`,
+      height: `${scale.height * 100}%`
+    });
+
+  }, 100); // TODO: Could make sense to investigate a better trigger for starting setRotation
+};
+
+/**
+ * Get hull size for (rotated) element.
+ * @param {H5P.jQuery} element Element.
+ * @return {object} Hull size of element.
+ */
+export const getHullSize = function($element) {
+  const clientRect = $element[0].getBoundingClientRect();
+
+  return {
+    width: clientRect.width,
+    height: clientRect.height
+  };
+};
+
+/**
  * @const {H5P.jQuery}
  */
 const $STRIP_HTML_HELPER = $('<div>');

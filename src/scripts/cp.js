@@ -4,7 +4,7 @@ import NavigationLine from './navigation-line';
 import SlideBackground from './slide-backgrounds';
 import KeywordsMenu from './keyword-menu';
 import { jQuery as $ } from './globals';
-import { flattenArray, addClickAndKeyboardListeners, isFunction, kebabCase, stripHTML, keyCode } from './utils';
+import { flattenArray, addClickAndKeyboardListeners, isFunction, kebabCase, stripHTML, keyCode, fitElement } from './utils';
 import Slide from './slide.js';
 
 /**
@@ -698,6 +698,43 @@ CoursePresentation.prototype.fitCT = function () {
 };
 
 /**
+ * Set rotation of elements.
+ * @param {object[]} elementParams Element parameters.
+ * @param {H5P.jQuery[]} elementContainers Element containers.
+ */
+CoursePresentation.prototype.setRotation = function (elementParams, elementContainers) {
+  elementParams.forEach((element, index) => {
+    if (typeof element.angle !== 'undefined') {
+      const $elementContainer = elementContainers[index];
+
+      // TODO: This may lead to weird effects in the editor, but overflow is required to show the dragnresize-corners
+      if (this.editor === undefined) {
+        $elementContainer.css({
+          overflow: 'hidden'
+        });
+      }
+
+      /*
+       * When rotating the element-outer element, it will not fit into the
+       * parent container and sides will be cut off. Solution in fitElement:
+       * 1) Scale the parent to be large enough to take element-outer and use percentage as unit
+       * 2) As element outer will scale up (width and height of 100%), so scale it down
+       * 3) Fix scaling and positioning of element-inner element caused by scaling element-outer element
+       */
+      const $outerElementContainer = $elementContainer.find('.h5p-element-outer');
+      // Rotate if not already rotated
+      if ($outerElementContainer.get(0).style.transform === '') {
+        $outerElementContainer.css({
+          'transform': `rotate(${element.angle}deg)`
+        });
+
+        fitElement($outerElementContainer, $elementContainer);
+      }
+    }
+  });
+}
+
+/**
  * Resize handling.
  *
  * @param {Boolean} fullscreen
@@ -750,6 +787,11 @@ CoursePresentation.prototype.resize = function () {
   }
 
   this.fitCT();
+
+  if (slideElements) {
+    // Set rotation now that the slide size is set
+    this.setRotation(slideElements, this.slides[this.$current.index()].elementContainers);
+  }
 };
 
 /**
@@ -877,6 +919,24 @@ CoursePresentation.prototype.attachElements = function ($slide, index) {
 };
 
 /**
+ * Register slides' element containers that may be needed when resizing.
+ * @param {number} slideID Slide id in presentation.
+ * @param {jQuery} $elementContainer Element container.
+ */
+CoursePresentation.prototype.registerElementContainer = function (slideId, $elementContainer) {
+  this.slides[slideId].elementContainers = this.slides[slideId].elementContainers || [];
+  const containerNumbers = this.slides[slideId].elementContainers.length;
+
+  // $elementContainer gets created twice: when adding interaction and when closing form
+  if (this.slides[slideId].elements.length === containerNumbers) {
+    this.slides[slideId].elementContainers[containerNumbers - 1] = $elementContainer;
+  }
+  else {
+    this.slides[slideId].elementContainers.push($elementContainer);
+  }
+}
+
+/**
  * Attach element to slide container.
  *
  * @param {Object} element
@@ -968,6 +1028,9 @@ CoursePresentation.prototype.attachElement = function (element, instance, $slide
      * so that we can display the export answers button on the last slide */
     this.hasAnswerElements = this.hasAnswerElements || instance.exportAnswers !== undefined;
   }
+
+  this.registerElementContainer(index, $elementContainer);
+  this.setRotation([element], [$elementContainer]);
 
   return $elementContainer;
 };
