@@ -2,8 +2,8 @@
   "title": "Course Presentation (KidsLoop)",
   "contentType": "Library",
   "majorVersion": 1,
-  "minorVersion": 22,
-  "patchVersion": 2,
+  "minorVersion": 23,
+  "patchVersion": 0,
   "runnable": 1,
   "fullscreen": 1,
   "embedTypes": [
