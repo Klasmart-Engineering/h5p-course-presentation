@@ -450,7 +450,8 @@
 .h5p-course-presentation .h5p-summary-button,
 .h5p-course-presentation .h5p-dialogcards-button,
 .h5p-course-presentation .h5p-interactivevideo-button,
-.h5p-course-presentation .h5p-truefalse-button {
+.h5p-course-presentation .h5p-truefalse-button,
+.h5p-course-presentation .h5p-jigsawpuzzlekid-button {
   background: #981d99;
   border-color: #e489f3; /* Used by focus effect */
 }
@@ -465,7 +466,8 @@
 .h5p-course-presentation .h5p-summary-button:hover,
 .h5p-course-presentation .h5p-dialogcards-button:hover,
 .h5p-course-presentation .h5p-interactivevideo-button:hover,
-.h5p-course-presentation .h5p-truefalse-button:hover {
+.h5p-course-presentation .h5p-truefalse-button:hover,
+.h5p-course-presentation .h5p-jigsawpuzzlekid-button:hover {
   background: #661366;
 }
 
@@ -521,6 +523,12 @@
   font-family: 'H5PFontIcons';
   font-size: 1.2em;
   content: "\e902";
+}
+
+.h5p-course-presentation .h5p-jigsawpuzzlekid-button:before {
+  content: "\f12e";
+  padding-left: 0.2em;
+  padding-top: 0.1em;
 }
 
 .h5p-course-presentation .h5p-dragquestion-button:before {
