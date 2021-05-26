@@ -379,6 +379,15 @@
   text-decoration: none;
 }
 
+.h5p-course-presentation .h5p-course-presentation-selection-not-allowed {
+  -webkit-touch-callout: none; /* iOS Safari */
+  -webkit-user-select: none; /* Safari */
+  -khtml-user-select: none; /* Konqueror HTML */
+  -moz-user-select: none; /* Old versions of Firefox */
+  -ms-user-select: none; /* Internet Explorer/Edge */
+  user-select: none; /* Non-prefixed version, currently supported by Chrome, Edge, Opera and Firefox */
+}
+
 .h5p-course-presentation .h5p-element-button-wrapper .h5p-element-solution {
   right: -1.2em;
   top: -1.3em;
@@ -831,4 +840,20 @@
   margin-right: 0.5em;
   margin-left: 0.1em;
   vertical-align: middle;
+}
+
+.h5p-course-presentation .h5p-course-presentation-custom-audio-button {
+  background: none;
+  border: 0;
+  border-radius: 0;
+  padding: 0;
+}
+
+.h5p-course-presentation .h5p-course-presentation-custom-audio-button::before {
+  content: none;
+}
+
+.h5p-course-presentation .h5p-course-presentation-custom-audio-button-image {
+  height: 100%;
+  width: 100%;
 }
