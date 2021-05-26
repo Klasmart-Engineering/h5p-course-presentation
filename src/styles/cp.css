@@ -228,16 +228,44 @@
 .h5p-course-presentation .h5p-element.h5p-element-button-wrapper {
   border: 0;
   background-color: transparent !important;
-  width: 1.5em !important;
-  height: 1.5em !important;
   overflow: visible !important;
   z-index: 2;
 }
 
+.h5p-course-presentation .h5p-element.h5p-element-button-wrapper:not(.h5p-element-button-custom) {
+  width: 1.5em !important;
+  height: 1.5em !important;
+}
+
 .h5p-course-presentation .h5p-element.h5p-element-button-wrapper.h5p-element-button-big {
+  line-height: 2.334em !important;
+}
+
+.h5p-course-presentation .h5p-element.h5p-element-button-wrapper:not(.h5p-element-button-custom).h5p-element-button-big {
   width: 2.334em !important;
   height: 2.334em !important;
-  line-height: 2.334em !important;
+}
+
+.h5p-course-presentation .h5p-element .h5p-element-button-custom {
+  background: none;
+  box-shadow: none;
+  border-radius: 0;
+  color: transparent;
+  height: 100%;
+  width: 100%;
+}
+
+.h5p-course-presentation .h5p-element .h5p-element-button-custom:hover {
+  box-shadow: none;
+}
+
+.h5p-course-presentation .h5p-element .h5p-element-button-custom::before {
+  content: none;
+}
+
+.h5p-course-presentation .h5p-element .h5p-element-button-custom-image {
+  height: 100%;
+  width: 100%;
 }
 
 .h5p-course-presentation .h5p-element.h5p-blanks,

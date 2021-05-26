@@ -182,6 +182,13 @@
                     ]
                   },
                   {
+                    "name": "buttonImage",
+                    "type": "image",
+                    "label": "Custom button image",
+                    "importance": "low",
+                    "optional": true
+                  },
+                  {
                     "name": "title",
                     "type": "text",
                     "optional": true,

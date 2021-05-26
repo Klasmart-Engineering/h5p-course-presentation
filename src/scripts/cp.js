@@ -704,7 +704,7 @@ CoursePresentation.prototype.fitCT = function () {
  */
 CoursePresentation.prototype.setRotation = function (elementParams, elementContainers) {
   elementParams.forEach((element, index) => {
-    if (typeof element.angle !== 'undefined') {
+    if (typeof element.angle !== 'undefined' && !element.displayAsButton) {
       const $elementContainer = elementContainers[index];
 
       // TODO: This may lead to weird effects in the editor, but overflow is required to show the dragnresize-corners
@@ -723,7 +723,7 @@ CoursePresentation.prototype.setRotation = function (elementParams, elementConta
        */
       const $outerElementContainer = $elementContainer.find('.h5p-element-outer');
       // Rotate if not already rotated
-      if ($outerElementContainer.get(0).style.transform === '') {
+      if ($outerElementContainer.get(0) && $outerElementContainer.get(0).style.transform === '') {
         $outerElementContainer.css({
           'transform': `rotate(${element.angle}deg)`
         });
@@ -732,7 +732,7 @@ CoursePresentation.prototype.setRotation = function (elementParams, elementConta
       }
     }
   });
-}
+};
 
 /**
  * Resize handling.
@@ -948,9 +948,12 @@ CoursePresentation.prototype.registerElementContainer = function (slideId, $elem
 CoursePresentation.prototype.attachElement = function (element, instance, $slide, index) {
   const displayAsButton = (element.displayAsButton !== undefined && element.displayAsButton);
   var buttonSizeClass = (element.buttonSize !== undefined ? "h5p-element-button-" + element.buttonSize : "");
+
+  const buttonImageClass = (element.buttonImage && element.buttonImage.path) ? 'h5p-element-button-custom' : '';
   var classes = 'h5p-element' +
     (displayAsButton ? ' h5p-element-button-wrapper' : '') +
-    (buttonSizeClass.length ? ' ' + buttonSizeClass : '');
+    (buttonSizeClass.length ? ' ' + buttonSizeClass : '') +
+    (buttonImageClass.length ? ' ' + buttonImageClass : '');
   var $elementContainer = H5P.jQuery('<div>', {
     'class': classes,
   }).css({
@@ -1151,14 +1154,35 @@ CoursePresentation.prototype.createInteractionButton = function (element, instan
    */
   const setAriaExpandedFalse = $btn => () => $btn.attr('aria-expanded', 'false');
 
-  const $button = $('<div>', {
-    role: 'button',
-    tabindex: 0,
-    'aria-label': label,
-    'aria-popup': true,
-    'aria-expanded': false,
-    'class': `h5p-element-button h5p-element-button-${element.buttonSize} ${libTypePmz}-button`
-  });
+  let $button;
+
+  if (element?.buttonImage?.path) {
+    $button = $('<div>', {
+      role: 'button',
+      tabindex: 0,
+      'aria-label': label,
+      'aria-popup': true,
+      'aria-expanded': false,
+      'class': `h5p-element-button h5p-element-button-custom`
+    });
+
+    const customImage = document.createElement('img');
+    customImage.classList.add('h5p-element-button-custom-image');
+    customImage.classList.add('h5p-course-presentation-selection-not-allowed');
+    customImage.setAttribute('draggable', false);
+    H5P.setSource(customImage, element.buttonImage, this.contentId);
+    $button.append(customImage);
+  }
+  else {
+    $button = $('<div>', {
+      role: 'button',
+      tabindex: 0,
+      'aria-label': label,
+      'aria-popup': true,
+      'aria-expanded': false,
+      'class': `h5p-element-button h5p-element-button-${element.buttonSize} ${libTypePmz}-button`
+    });
+  }
 
   const $buttonElement = $('<div class="h5p-button-element"></div>');
   instance.attach($buttonElement);
