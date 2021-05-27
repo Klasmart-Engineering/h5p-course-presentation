@@ -57,7 +57,7 @@
 .h5p-course-presentation .h5p-summary-task-title {
   width: 60%;
   text-align: left;
-  font-size: 0.7em;
+  font-size: 0.75em;
 }
 
 .h5p-course-presentation .h5p-summary-task-title .h5p-slide-link {
@@ -125,7 +125,7 @@
 
 .h5p-course-presentation .h5p-summary-total-score {
   float: right;
-  font-size: 0.6em;
+  font-size: 0.75em;
 }
 
 .h5p-course-presentation .h5p-summary-social {
@@ -162,7 +162,7 @@
 }
 
 .h5p-course-presentation .h5p-summary-table-header {
-  font-size: 0.5em;
+  font-size: 0.65em;
   text-transform: capitalize;
   font-weight: normal;
   padding-bottom: 1em;
