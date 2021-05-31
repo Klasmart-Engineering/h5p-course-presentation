@@ -257,6 +257,7 @@
 
 .h5p-course-presentation .h5p-element .h5p-element-button-custom:hover {
   box-shadow: none;
+  background: none;
 }
 
 .h5p-course-presentation .h5p-element .h5p-element-button-custom::before {
