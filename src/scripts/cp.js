@@ -140,10 +140,31 @@ let CoursePresentation = function (params, id, extras) {
       that.attachAllElements();
     }
   });
+
+  this.scores = this.previousState && this.previousState.scores || {};
+  this.trackScores();
 };
 
 CoursePresentation.prototype = Object.create(Parent.prototype);
 CoursePresentation.prototype.constructor = CoursePresentation;
+
+/**
+ * Keep track of subcontent scores.
+ */
+CoursePresentation.prototype.trackScores = function () {
+  this.slidesWithSolutions.forEach(instances => {
+    instances.forEach(instance => {
+      instance.on('xAPI', (event) => {
+        const score = event.getScore();
+        if (score === null) {
+          return;
+        }
+
+        this.scores[instance.subContentId] = score;
+      });
+    });
+  });
+};
 
 /**
  * @public
@@ -174,6 +195,8 @@ CoursePresentation.prototype.getCurrentState = function () {
       }
     }
   }
+
+  state.scores = this.scores;
 
   return state;
 };
@@ -2108,7 +2131,7 @@ CoursePresentation.prototype.getSlideScores = function (noJump) {
         var elementInstance = this.slidesWithSolutions[i][j];
         if (elementInstance.getMaxScore !== undefined) {
           slideMaxScore += elementInstance.getMaxScore();
-          slideScore += elementInstance.getScore();
+          slideScore += this.scores[elementInstance.subContentId] || 0;
           hasScores = true;
           indexes.push(elementInstance.coursePresentationIndexOnSlide);
         }
