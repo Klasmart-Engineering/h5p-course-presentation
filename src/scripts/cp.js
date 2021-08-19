@@ -1861,6 +1861,27 @@ CoursePresentation.prototype.attachAllElements = function () {
 };
 
 /**
+ * Jump to slide where content with particular subContentId is included.
+ * @param {string} subContentId Particular subContentId.
+ */
+CoursePresentation.prototype.jumpToSubContentId = function (subContentId) {
+  let slideNumber = null;
+  for (let i = 0; i < this.elementInstances.length; i++) {
+    const h5pInstances = this.elementInstances[i];
+    for (let j = 0; j < h5pInstances.length; j++) {
+      if (h5pInstances[j].subContentId === subContentId) {
+        slideNumber = i;
+        break;
+      }
+    }
+  }
+
+  if (slideNumber !== null) {
+    this.jumpToSlide(slideNumber, true);
+  }
+};
+
+/**
  * Jump to the given slide.
  *
  * @param {number} slideNumber The slide number to jump to.
