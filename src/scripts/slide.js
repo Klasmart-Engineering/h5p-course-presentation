@@ -37,6 +37,24 @@ function Slide(parameters) {
 
     for (let i = 0; i < self.children.length; i++) {
       self.parent.attachElement(parameters.elements[i], self.children[i].instance, $wrapper, self.index);
+
+      /*
+       * Workaround for KidsLoop app. When dragging a text draggable, the
+       * screen slides as well and nobody seems to be able or willing to
+       * investigate why instead.
+       */
+      const instance = self.children[i].instance;
+      if (instance.libraryInfo.machineName === 'H5P.DragText') {
+        self.children[i].instance.$draggables.get(0).childNodes.forEach(child => {
+          child.addEventListener('touchstart', () => {
+            this.parent.blockSliding = true;
+          });
+
+          child.addEventListener('touchend', () => {
+            this.parent.blockSliding = false;
+          });
+        });
+      }
     }
 
     self.parent.elementsAttached[self.index] = true;

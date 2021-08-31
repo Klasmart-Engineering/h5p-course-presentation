@@ -1618,6 +1618,10 @@ CoursePresentation.prototype.initTouchEvents = function () {
   var reset = transform('');
 
   this.$slidesWrapper.bind('touchstart', function (event) {
+    if (that.blockSliding) {
+      return; // Workaround for KidsLoop app
+    }
+
     isTouchJump = false;
     // Set start positions
     lastX = startX = event.originalEvent.touches[0].pageX;
@@ -1635,6 +1639,10 @@ CoursePresentation.prototype.initTouchEvents = function () {
     touchStarted = true;
 
   }).bind('touchmove', function (event) {
+    if (that.blockSliding) {
+      return; // Workaround for KidsLoop app
+    }
+
     var touches = event.originalEvent.touches;
 
     if (touchStarted) {
@@ -1696,6 +1704,10 @@ CoursePresentation.prototype.initTouchEvents = function () {
     }*/
 
   }).bind('touchend', function () {
+    if (that.blockSliding) {
+      return; // Workaround for KidsLoop app
+    }
+
     if (!scroll) {
       /*if (isTouchJump) {
         that.jumpToSlide(nextSlide);
