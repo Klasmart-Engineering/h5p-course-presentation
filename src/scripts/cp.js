@@ -1037,26 +1037,6 @@ CoursePresentation.prototype.attachElement = function (element, instance, $slide
       }
     }
 
-    // Add protective touch margin left of Drag Text
-    if (instance.libraryInfo.machineName === 'H5P.DragText') {
-      const $h5pElement = $innerElementContainer.closest('.h5p-element');
-
-      $('<div>', {
-        class: 'prevent-touch',
-        css: {
-          height: $h5pElement.css('height'),
-          left: `calc(${$h5pElement.css('left')} - 2em)`,
-          top: $h5pElement.css('top')
-        }
-      }).on('touchstart', (event) => {
-        event.preventDefault();
-        return false;
-      }).on('touchmove', (event) => {
-        event.preventDefault();
-        return false;
-      }).appendTo($h5pElement.parent());
-    }
-
     // For first slide
     this.setOverflowTabIndex();
   }

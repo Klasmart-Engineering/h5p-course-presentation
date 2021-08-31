@@ -225,11 +225,6 @@
   z-index: 1;
 }
 
-.h5p-course-presentation .prevent-touch {
-  position: absolute;
-  width: 2em;
-}
-
 .h5p-course-presentation .h5p-element.h5p-element-button-wrapper {
   border: 0;
   background-color: transparent !important;
