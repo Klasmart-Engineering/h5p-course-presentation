@@ -1038,7 +1038,7 @@ CoursePresentation.prototype.attachElement = function (element, instance, $slide
     }
 
     // Add protective touch margin left of Drag Text
-    if (!this.editor && instance.libraryInfo.machineName === 'H5P.DragText') {
+    if (instance.libraryInfo.machineName === 'H5P.DragText') {
       const $h5pElement = $innerElementContainer.closest('.h5p-element');
 
       $('<div>', {
