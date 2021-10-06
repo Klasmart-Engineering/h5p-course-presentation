@@ -44,7 +44,7 @@ function Slide(parameters) {
        * investigate why instead.
        */
       const instance = self.children[i].instance;
-      if (instance.libraryInfo.machineName === 'H5P.DragText') {
+      if (instance && instance.libraryInfo && instance.libraryInfo.machineName === 'H5P.DragText') {
         self.children[i].instance.$draggables.get(0).childNodes.forEach(child => {
           child.addEventListener('touchstart', () => {
             this.parent.blockSliding = true;
