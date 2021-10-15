@@ -8,12 +8,30 @@
               {
                 "field": {
                   "fields": [
-                    {},
-                    {},
-                    {},
-                    {},
-                    {},
-                    {},
+                    {
+                      "one": "",
+                      "other": ""
+                    },
+                    {
+                      "one": "",
+                      "other": ""
+                    },
+                    {
+                      "one": "",
+                      "other": ""
+                    },
+                    {
+                      "one": "",
+                      "other": ""
+                    },
+                    {
+                      "one": "",
+                      "other": ""
+                    },
+                    {
+                      "one": "",
+                      "other": ""
+                    },
                     {
                       "label": "Komentar",
                       "description": "Komentar ditunjukkan ketika pengguna menampilkan jawaban yang disarankan untuk semua slide."
@@ -66,7 +84,10 @@
                   ]
                 }
               },
-              {},
+              {
+                "one": "",
+                "other": ""
+              },
               {
                 "fields": [
                   {
@@ -82,7 +103,10 @@
             ]
           }
         },
-        {},
+        {
+          "one": "",
+          "other": ""
+        },
         {
           "label": "Daftar kata kunci"
         },
