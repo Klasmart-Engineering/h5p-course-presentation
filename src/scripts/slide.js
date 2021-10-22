@@ -31,47 +31,12 @@ function Slide(parameters) {
   };
 
   /**
-   * Workaround for KidsLoop app. When dragging a text draggable, the
-   * screen slides as well and nobody seems to be able or willing to
-   * investigate why instead.
-   * @param {H5P.ContentType} instance Instance of H5P content.
-   * @param {string[]} machineNames Machine names of libraries to block dragging.
-   */
-  self.kidsloopPreventDragging = function (instance, machineNames) {
-    const machineName = instance && instance.libraryInfo && instance.libraryInfo.machineName || null;
-
-    if (machineNames.indexOf(machineName) !== -1) {
-      let draggablesToBlock = [];
-      if (machineName === 'H5P.DragText') {
-        draggablesToBlock = instance.$draggables.get(0).childNodes;
-      }
-      else if (machineName === 'H5P.DragQuestion') {
-        draggablesToBlock = instance.draggables.map(draggable => draggable.element.$.get(0));
-      }
-
-      // Add listeners to block dragging on slides
-      draggablesToBlock.forEach(draggable => {
-        draggable.addEventListener('touchstart', () => {
-          this.parent.blockSliding = true;
-        });
-
-        draggable.addEventListener('touchend', () => {
-          this.parent.blockSliding = false;
-        });
-      });
-    }
-  };
-
-  /**
    * Append all of the elements to the slide.
    */
   self.appendElements = function () {
 
     for (let i = 0; i < self.children.length; i++) {
       self.parent.attachElement(parameters.elements[i], self.children[i].instance, $wrapper, self.index);
-
-      // Workaround for KidsLoop app.
-      self.kidsloopPreventDragging(self.children[i].instance, Slide.KIDSLOOP_PREVENT_DRAGGING);
     }
 
     self.parent.elementsAttached[self.index] = true;
@@ -92,8 +57,5 @@ function Slide(parameters) {
 Slide.createHTML = function (parameters) {
   return '<div role="document" class="h5p-slide"' + (parameters.background !== undefined ? ' style="background:' + parameters.background + '"' : '') + '></div>';
 };
-
-/** @constant Machine name of content types that should prevent slide dragging, KidsLoop workaround for app */
-Slide.KIDSLOOP_PREVENT_DRAGGING = ['H5P.DragText', 'H5P.DragQuestion'];
 
 export default Slide;

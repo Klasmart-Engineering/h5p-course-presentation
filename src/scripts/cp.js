@@ -1094,6 +1094,9 @@ CoursePresentation.prototype.attachElement = function (element, instance, $slide
   this.registerElementContainer(index, $elementContainer);
   this.setRotation([element], [$elementContainer]);
 
+  // KidsLoop workaround for KidsLoop app
+  this.kidsloopPreventDragging(instance);
+
   return $elementContainer;
 };
 
@@ -2321,6 +2324,71 @@ CoursePresentation.prototype.getXAPIData = function () {
     statement: xAPIEvent.data.statement,
     children: childrenXAPIData
   };
+};
+
+/**
+ * Workaround for KidsLoop app. When dragging a text draggable, the
+ * screen slides as well and nobody seems to be able or willing to
+ * investigate why instead.
+ * @param {H5P.ContentType} instance Instance of H5P content.
+ */
+CoursePresentation.prototype.kidsloopPreventDragging = function (instance) {
+  const machineName = instance && instance.libraryInfo && instance.libraryInfo.machineName || null;
+
+  let draggablesToBlock = [];
+  if (machineName === 'H5P.DragText') {
+    draggablesToBlock = instance.$draggables.get(0).childNodes;
+  }
+  else if (machineName === 'H5P.DragQuestion') {
+    draggablesToBlock = instance.draggables.map(draggable => draggable.element.$.get(0));
+  }
+  else if (machineName === 'H5P.ImageSequencing') {
+    draggablesToBlock = instance.sequencingCards.map(card => card.$card.get(0));
+  }
+  else if (machineName === 'H5P.JigsawPuzzleKID') {
+    // Tiles will not be instantly accessible when attached
+    instance.once('reset', () => {
+      draggablesToBlock = instance.content.tiles.map(tile => tile.instance.getDOM());
+      this.kidsloopAddPreventDraggingListeners(draggablesToBlock);
+    });
+  }
+  else if (machineName === 'H5P.InteractiveVideo') {
+    instance.interactions.forEach(interaction => {
+      const instance = interaction.getInstance();
+
+      if (instance.libraryInfo && instance.libraryInfo.machineName === 'H5P.DragQuestion') {
+        // Elements will only be created once the instance is attached to the DOM
+        interaction.once('display', () => {
+          this.kidsloopPreventDragging(instance);
+        });
+      }
+      else {
+        this.kidsloopPreventDragging(instance);
+      }
+    });
+  }
+
+  if (draggablesToBlock.length === 0) {
+    return;
+  }
+
+  this.kidsloopAddPreventDraggingListeners(draggablesToBlock);
+};
+
+/**
+ * Add listeners to block dragging on slides.
+ * @param {HTMLElement[]} draggablesToBlock Draggables to block sliding.
+ */
+CoursePresentation.prototype.kidsloopAddPreventDraggingListeners = function (draggablesToBlock) {
+  draggablesToBlock.forEach(draggable => {
+    draggable.addEventListener('touchstart', () => {
+      this.blockSliding = true;
+    });
+
+    draggable.addEventListener('touchend', () => {
+      this.blockSliding = false;
+    });
+  });
 };
 
 export default CoursePresentation;
