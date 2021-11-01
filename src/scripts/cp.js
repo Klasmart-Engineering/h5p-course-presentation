@@ -1621,111 +1621,115 @@ CoursePresentation.prototype.initTouchEvents = function () {
   var reset = transform('');
 
   this.$slidesWrapper.bind('touchstart', function (event) {
-    if (that.blockSliding) {
-      return; // Workaround for KidsLoop app
-    }
+    setTimeout(() => {
+      if (that.blockSliding) {
+        return; // Workaround for KidsLoop app
+      }
 
-    isTouchJump = false;
-    // Set start positions
-    lastX = startX = event.originalEvent.touches[0].pageX;
-    startY = event.originalEvent.touches[0].pageY;
-    const slideWidth = that.$slidesWrapper.width();
+      isTouchJump = false;
+      // Set start positions
+      lastX = startX = event.originalEvent.touches[0].pageX;
+      startY = event.originalEvent.touches[0].pageY;
+      const slideWidth = that.$slidesWrapper.width();
 
-    // Set classes for slide movement and remember how much they move
-    prevX = (that.currentSlideIndex === 0 ? 0 : - slideWidth);
-    nextX = (that.currentSlideIndex + 1 >= that.slides.length ? 0 : slideWidth)
+      // Set classes for slide movement and remember how much they move
+      prevX = (that.currentSlideIndex === 0 ? 0 : - slideWidth);
+      nextX = (that.currentSlideIndex + 1 >= that.slides.length ? 0 : slideWidth)
 
-    // containerWidth = H5P.jQuery(this).width();
-    // startTime = new Date().getTime();
+      // containerWidth = H5P.jQuery(this).width();
+      // startTime = new Date().getTime();
 
-    scroll = null;
-    touchStarted = true;
-
+      scroll = null;
+      touchStarted = true;
+    }, 50);
   }).bind('touchmove', function (event) {
-    if (that.blockSliding) {
-      return; // Workaround for KidsLoop app
-    }
+    setTimeout(() => {
+      if (that.blockSliding) {
+        return; // Workaround for KidsLoop app
+      }
 
-    var touches = event.originalEvent.touches;
+      var touches = event.originalEvent.touches;
 
-    if (touchStarted) {
-      that.$current.prev().addClass('h5p-touch-move');
-      that.$current.next().addClass('h5p-touch-move');
-      touchStarted = false;
-    }
+      if (touchStarted) {
+        that.$current.prev().addClass('h5p-touch-move');
+        that.$current.next().addClass('h5p-touch-move');
+        touchStarted = false;
+      }
 
-    // Determine horizontal movement
-    lastX = touches[0].pageX;
-    var movedX = startX - lastX;
+      // Determine horizontal movement
+      lastX = touches[0].pageX;
+      var movedX = startX - lastX;
 
-    if (scroll === null) {
-      // Detemine if we're scrolling horizontally or changing slide
-      scroll = Math.abs(startY - event.originalEvent.touches[0].pageY) > Math.abs(movedX);
-    }
-    if (touches.length !== 1 || scroll) {
-      // Do nothing if we're scrolling, zooming etc.
-      return;
-    }
+      if (scroll === null) {
+        // Detemine if we're scrolling horizontally or changing slide
+        scroll = Math.abs(startY - event.originalEvent.touches[0].pageY) > Math.abs(movedX);
+      }
+      if (touches.length !== 1 || scroll) {
+        // Do nothing if we're scrolling, zooming etc.
+        return;
+      }
 
-    // Disable horizontal scrolling when changing slide
-    event.preventDefault();
+      // Disable horizontal scrolling when changing slide
+      event.preventDefault();
 
-    // Create popup longer time than navigateTimer has passed
-    if (!isTouchJump) {
-      /*currentTime = new Date().getTime();
-      var timeLapsed = currentTime - startTime;
-      if (timeLapsed > navigateTimer) {
-        isTouchJump = true;
+      // Create popup longer time than navigateTimer has passed
+      if (!isTouchJump) {
+        /*currentTime = new Date().getTime();
+        var timeLapsed = currentTime - startTime;
+        if (timeLapsed > navigateTimer) {
+          isTouchJump = true;
+        }*/
+
+        // Fast swipe to next slide
+        if (movedX < 0) {
+          // Move previous slide
+          that.$current.prev().css(transform('translateX(' + (prevX - movedX) + 'px'));
+        }
+        else {
+          // Move next slide
+          that.$current.next().css(transform('translateX(' + (nextX - movedX) + 'px)'));
+        }
+
+        // Move current slide
+        that.$current.css(transform('translateX(' + (-movedX) + 'px)'));
+      }
+      // TODO: Jumping over multiple slides disabled until redesigned.
+
+      /* else {
+        that.$current.css(reset);
+        // Update slider popup.
+        nextSlide = parseInt(that.currentSlideIndex + (movedX / pixelsPerSlide), 10);
+        if (nextSlide >= that.slides.length -1) {
+          nextSlide = that.slides.length -1;
+        } else if (nextSlide < 0) {
+          nextSlide = 0;
+        }
+        // Create popup at initial touch point
+        that.updateTouchPopup(that.$slidesWrapper, nextSlide, startX, startY);
       }*/
-
-      // Fast swipe to next slide
-      if (movedX < 0) {
-        // Move previous slide
-        that.$current.prev().css(transform('translateX(' + (prevX - movedX) + 'px'));
-      }
-      else {
-        // Move next slide
-        that.$current.next().css(transform('translateX(' + (nextX - movedX) + 'px)'));
-      }
-
-      // Move current slide
-      that.$current.css(transform('translateX(' + (-movedX) + 'px)'));
-    }
-    // TODO: Jumping over multiple slides disabled until redesigned.
-
-    /* else {
-      that.$current.css(reset);
-      // Update slider popup.
-      nextSlide = parseInt(that.currentSlideIndex + (movedX / pixelsPerSlide), 10);
-      if (nextSlide >= that.slides.length -1) {
-        nextSlide = that.slides.length -1;
-      } else if (nextSlide < 0) {
-        nextSlide = 0;
-      }
-      // Create popup at initial touch point
-      that.updateTouchPopup(that.$slidesWrapper, nextSlide, startX, startY);
-    }*/
-
+    }, 50);
   }).bind('touchend', function () {
-    if (that.blockSliding) {
-      return; // Workaround for KidsLoop app
-    }
-
-    if (!scroll) {
-      /*if (isTouchJump) {
-        that.jumpToSlide(nextSlide);
-        that.updateTouchPopup();
-        return;
-      }*/
-
-      // If we're not scrolling detemine if we're changing slide
-      var moved = startX - lastX;
-      if (moved > that.swipeThreshold && that.nextSlide() || moved < -that.swipeThreshold && that.previousSlide()) {
-        return;
+    setTimeout(() => {
+      if (that.blockSliding) {
+        return; // Workaround for KidsLoop app
       }
-    }
-    // Reset.
-    that.$slidesWrapper.children().css(reset).removeClass('h5p-touch-move');
+
+      if (!scroll) {
+        /*if (isTouchJump) {
+          that.jumpToSlide(nextSlide);
+          that.updateTouchPopup();
+          return;
+        }*/
+
+        // If we're not scrolling detemine if we're changing slide
+        var moved = startX - lastX;
+        if (moved > that.swipeThreshold && that.nextSlide() || moved < -that.swipeThreshold && that.previousSlide()) {
+          return;
+        }
+      }
+      // Reset.
+      that.$slidesWrapper.children().css(reset).removeClass('h5p-touch-move');
+    }, 50);
   });
 };
 
