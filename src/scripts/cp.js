@@ -2356,6 +2356,14 @@ CoursePresentation.prototype.kidsloopPreventDragging = function (instance) {
     });
   }
   else if (machineName === 'H5P.InteractiveVideo') {
+    // Slider handle is a draggable
+    instance.on('controls', () => {
+      const $sliderHandle = instance.$controls.find('.ui-slider-handle');
+      if ($sliderHandle) {
+        this.kidsloopAddPreventDraggingListeners([$sliderHandle.get(0)]);
+      }
+    });
+
     instance.interactions.forEach(interaction => {
       const instance = interaction.getInstance();
 
