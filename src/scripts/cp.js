@@ -324,7 +324,7 @@ CoursePresentation.prototype.attach = function ($container) {
   var wrapperHeight = parseInt(this.$wrapper.css('height'));
   this.height = wrapperHeight !== 0 ? wrapperHeight : 400;
 
-  this.ratio = 16/9;
+  this.ratio = 16 / 9;
   // Intended base font size cannot be read from CSS, as it might be modified
   // by mobile browsers already. (The Android native browser does this.)
   this.fontSize = 16;
@@ -615,7 +615,7 @@ CoursePresentation.prototype.setProgressBarFeedback = function (slideScores) {
   if (slideScores !== undefined && slideScores) {
     // Set feedback icons for progress bar.
     slideScores.forEach(singleSlide => {
-      const $indicator = this.progressbarParts[singleSlide.slide-1]
+      const $indicator = this.progressbarParts[singleSlide.slide - 1]
         .find('.h5p-progressbar-part-has-task');
 
       if ($indicator.hasClass('h5p-answered')) {
@@ -957,7 +957,7 @@ CoursePresentation.prototype.registerElementContainer = function (slideId, $elem
   else {
     this.slides[slideId].elementContainers.push($elementContainer);
   }
-}
+};
 
 /**
  * Attach element to slide container.
@@ -1270,7 +1270,7 @@ CoursePresentation.prototype.showInteractionPopup = function (instance, $button,
       this.resizePopupImage($buttonElement);
     }
 
-    var $container = $buttonElement.closest('.h5p-popup-container');
+    // var $container = $buttonElement.closest('.h5p-popup-container');
 
     // Focus directly on content when popup is opened
     setTimeout(() => {
@@ -1755,7 +1755,7 @@ CoursePresentation.prototype.updateTouchPopup = function ($container, slideNumbe
     keyword += this.$keywords.children(':eq(' + slideNumber + ')').find('span').html();
   }
   else {
-    var slideIndexToNumber = slideNumber+1;
+    var slideIndexToNumber = slideNumber + 1;
     keyword += this.l10n.slide + ' ' + slideIndexToNumber;
   }
 
@@ -1847,14 +1847,14 @@ CoursePresentation.prototype.getCurrentSlideIndex = function () {
 CoursePresentation.prototype.attachAllElements = function () {
   var $slides = this.$slidesWrapper.children();
 
-  for (var i=0; i<this.slides.length; i++) {
+  for (var i = 0; i < this.slides.length; i++) {
     this.attachElements($slides.eq(i), i);
   }
 
   // Need to force updating summary slide! This is normally done
   // only when summary slide is about to be viewed
   if (this.summarySlideObject !== undefined) {
-    this.summarySlideObject.updateSummarySlide(this.slides.length-1, true);
+    this.summarySlideObject.updateSummarySlide(this.slides.length - 1, true);
   }
 };
 
