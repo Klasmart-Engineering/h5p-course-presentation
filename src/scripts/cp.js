@@ -1621,115 +1621,114 @@ CoursePresentation.prototype.initTouchEvents = function () {
   var reset = transform('');
 
   this.$slidesWrapper.bind('touchstart', function (event) {
-    setTimeout(() => {
-      if (that.blockSliding) {
-        return; // Workaround for KidsLoop app
-      }
+    that.slideSliding = true;
+    if (that.blockSliding) {
+      return; // Workaround for KidsLoop app
+    }
 
-      isTouchJump = false;
-      // Set start positions
-      lastX = startX = event.originalEvent.touches[0].pageX;
-      startY = event.originalEvent.touches[0].pageY;
-      const slideWidth = that.$slidesWrapper.width();
+    isTouchJump = false;
+    // Set start positions
+    lastX = startX = event.originalEvent.touches[0].pageX;
+    startY = event.originalEvent.touches[0].pageY;
+    const slideWidth = that.$slidesWrapper.width();
 
-      // Set classes for slide movement and remember how much they move
-      prevX = (that.currentSlideIndex === 0 ? 0 : - slideWidth);
-      nextX = (that.currentSlideIndex + 1 >= that.slides.length ? 0 : slideWidth)
+    // Set classes for slide movement and remember how much they move
+    prevX = (that.currentSlideIndex === 0 ? 0 : - slideWidth);
+    nextX = (that.currentSlideIndex + 1 >= that.slides.length ? 0 : slideWidth);
 
-      // containerWidth = H5P.jQuery(this).width();
-      // startTime = new Date().getTime();
+    // containerWidth = H5P.jQuery(this).width();
+    // startTime = new Date().getTime();
 
-      scroll = null;
-      touchStarted = true;
-    }, 50);
+    scroll = null;
+    touchStarted = true;
   }).bind('touchmove', function (event) {
-    setTimeout(() => {
-      if (that.blockSliding) {
-        return; // Workaround for KidsLoop app
+    if (that.blockSliding) {
+      return; // Workaround for KidsLoop app
+    }
+
+    var touches = event.originalEvent.touches;
+
+    if (touchStarted) {
+      that.$current.prev().addClass('h5p-touch-move');
+      that.$current.next().addClass('h5p-touch-move');
+      touchStarted = false;
+    }
+
+    // Determine horizontal movement
+    lastX = touches[0].pageX;
+    var movedX = startX - lastX;
+
+    if (scroll === null) {
+      // Detemine if we're scrolling horizontally or changing slide
+      scroll = Math.abs(startY - event.originalEvent.touches[0].pageY) > Math.abs(movedX);
+    }
+    if (touches.length !== 1 || scroll) {
+      // Do nothing if we're scrolling, zooming etc.
+      return;
+    }
+
+    // Disable horizontal scrolling when changing slide
+    event.preventDefault();
+
+    // Create popup longer time than navigateTimer has passed
+    if (!isTouchJump) {
+      /*currentTime = new Date().getTime();
+      var timeLapsed = currentTime - startTime;
+      if (timeLapsed > navigateTimer) {
+        isTouchJump = true;
+      }*/
+
+      // Fast swipe to next slide
+      if (movedX < 0) {
+        // Move previous slide
+        that.$current.prev().css(transform('translateX(' + (prevX - movedX) + 'px'));
+      }
+      else {
+        // Move next slide
+        that.$current.next().css(transform('translateX(' + (nextX - movedX) + 'px)'));
       }
 
-      var touches = event.originalEvent.touches;
+      // Move current slide
+      that.$current.css(transform('translateX(' + (-movedX) + 'px)'));
+    }
+    // TODO: Jumping over multiple slides disabled until redesigned.
 
-      if (touchStarted) {
-        that.$current.prev().addClass('h5p-touch-move');
-        that.$current.next().addClass('h5p-touch-move');
-        touchStarted = false;
+    /* else {
+      that.$current.css(reset);
+      // Update slider popup.
+      nextSlide = parseInt(that.currentSlideIndex + (movedX / pixelsPerSlide), 10);
+      if (nextSlide >= that.slides.length -1) {
+        nextSlide = that.slides.length -1;
+      } else if (nextSlide < 0) {
+        nextSlide = 0;
       }
+      // Create popup at initial touch point
+      that.updateTouchPopup(that.$slidesWrapper, nextSlide, startX, startY);
+    }*/
+  }).bind('touchend', function () {
+    /*
+     * blockSliding introduced to work around issue on node.js port
+     */
+    if (!scroll && !that.blockSliding) {
+      /*if (isTouchJump) {
+        that.jumpToSlide(nextSlide);
+        that.updateTouchPopup();
+        return;
+      }*/
 
-      // Determine horizontal movement
-      lastX = touches[0].pageX;
-      var movedX = startX - lastX;
-
-      if (scroll === null) {
-        // Detemine if we're scrolling horizontally or changing slide
-        scroll = Math.abs(startY - event.originalEvent.touches[0].pageY) > Math.abs(movedX);
-      }
-      if (touches.length !== 1 || scroll) {
-        // Do nothing if we're scrolling, zooming etc.
+      // If we're not scrolling detemine if we're changing slide
+      var moved = startX - lastX;
+      if (moved > that.swipeThreshold && that.nextSlide() || moved < -that.swipeThreshold && that.previousSlide()) {
+        that.slideSliding = false;
         return;
       }
+    }
 
-      // Disable horizontal scrolling when changing slide
-      event.preventDefault();
+    // Reset.
+    that.$slidesWrapper.children().css(reset).removeClass('h5p-touch-move');
 
-      // Create popup longer time than navigateTimer has passed
-      if (!isTouchJump) {
-        /*currentTime = new Date().getTime();
-        var timeLapsed = currentTime - startTime;
-        if (timeLapsed > navigateTimer) {
-          isTouchJump = true;
-        }*/
-
-        // Fast swipe to next slide
-        if (movedX < 0) {
-          // Move previous slide
-          that.$current.prev().css(transform('translateX(' + (prevX - movedX) + 'px'));
-        }
-        else {
-          // Move next slide
-          that.$current.next().css(transform('translateX(' + (nextX - movedX) + 'px)'));
-        }
-
-        // Move current slide
-        that.$current.css(transform('translateX(' + (-movedX) + 'px)'));
-      }
-      // TODO: Jumping over multiple slides disabled until redesigned.
-
-      /* else {
-        that.$current.css(reset);
-        // Update slider popup.
-        nextSlide = parseInt(that.currentSlideIndex + (movedX / pixelsPerSlide), 10);
-        if (nextSlide >= that.slides.length -1) {
-          nextSlide = that.slides.length -1;
-        } else if (nextSlide < 0) {
-          nextSlide = 0;
-        }
-        // Create popup at initial touch point
-        that.updateTouchPopup(that.$slidesWrapper, nextSlide, startX, startY);
-      }*/
-    }, 50);
-  }).bind('touchend', function () {
-    setTimeout(() => {
-      if (that.blockSliding) {
-        return; // Workaround for KidsLoop app
-      }
-
-      if (!scroll) {
-        /*if (isTouchJump) {
-          that.jumpToSlide(nextSlide);
-          that.updateTouchPopup();
-          return;
-        }*/
-
-        // If we're not scrolling detemine if we're changing slide
-        var moved = startX - lastX;
-        if (moved > that.swipeThreshold && that.nextSlide() || moved < -that.swipeThreshold && that.previousSlide()) {
-          return;
-        }
-      }
-      // Reset.
-      that.$slidesWrapper.children().css(reset).removeClass('h5p-touch-move');
-    }, 50);
+    that.slideSliding = false;
+    that.blockSliding = false;
   });
 };
 
@@ -2381,6 +2380,13 @@ CoursePresentation.prototype.kidsloopPreventDragging = function (instance) {
 
 /**
  * Add listeners to block dragging on slides.
+ *
+ * For an unknown reason, on the node.js port of H5P, the touchstart event
+ * on subcontent's draggables also triggers the slide dragging of
+ * CoursePresentation.
+ * Workaround: use `blockSliding` (boolean) to register if a draggable is being
+ * dragged and prevent slide sliding in that case.
+ *
  * @param {HTMLElement[]} draggablesToBlock Draggables to block sliding.
  */
 CoursePresentation.prototype.kidsloopAddPreventDraggingListeners = function (draggablesToBlock) {
@@ -2390,7 +2396,10 @@ CoursePresentation.prototype.kidsloopAddPreventDraggingListeners = function (dra
     });
 
     draggable.addEventListener('touchend', () => {
-      this.blockSliding = false;
+      if (!this.slideSliding) {
+        // Don't block sliding on regular H5P platforms if timing is off
+        this.blockSliding = false;
+      }
     });
   });
 };
