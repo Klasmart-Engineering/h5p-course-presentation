@@ -2330,6 +2330,43 @@ CoursePresentation.prototype.getXAPIData = function () {
 };
 
 /**
+ * Check whether instance can get prevent dragging listeners (KidsLoop customization).
+ * @param {H5P.ContentType} instance H5P instance.
+ * @return {boolean} True, if instance can get prevent dragging listeners.
+ */
+CoursePresentation.prototype.isReadyForPreventDragging = function (instance) {
+  const machineName = instance && instance.libraryInfo && instance.libraryInfo.machineName || null;
+  if (machineName === 'H5P.DragText') {
+    return instance.$draggables !== undefined &&
+      instance.$draggables.get(0).childNodes !== undefined &&
+      instance.$draggables.get(0).childNodes.length > 0;
+  }
+  else if (machineName === 'H5P.DragQuestion') {
+    return instance.draggables !== undefined &&
+      instance.draggables.length > 0 &&
+      instance.draggables[0].element !== undefined &&
+      instance.draggables[0].element.$ !== undefined;
+  }
+  else if (machineName === 'H5P.ImageSequencing') {
+    return instance.sequencingCards !== undefined &&
+      instance.sequencingCards.length > 0 &&
+      instance.sequencingCards[0].$card !== undefined;
+  }
+  else if (machineName === 'H5P.JigsawPuzzleKID') {
+    return instance.content !== undefined &&
+      instance.content.tiles !== undefined &&
+      instance.content.tiles.length > 0 &&
+      instance.content.tiles[0].instance !== undefined;
+  }
+  else if (machineName === 'H5P.InteractiveVideo') {
+    return instance.$controls.find('.ui-slider-handle').length > 0;
+  }
+  else {
+    return false;
+  }
+};
+
+/**
  * Workaround for KidsLoop app. When dragging a text draggable, the
  * screen slides as well and nobody seems to be able or willing to
  * investigate why instead.
@@ -2337,6 +2374,15 @@ CoursePresentation.prototype.getXAPIData = function () {
  */
 CoursePresentation.prototype.kidsloopPreventDragging = function (instance) {
   const machineName = instance && instance.libraryInfo && instance.libraryInfo.machineName || null;
+
+  // Retry once when content type is resized (should happen when it was attached to the DOM)
+  if (!this.isReadyForPreventDragging(instance)) {
+    instance.once('resize', () => {
+      this.kidsloopPreventDragging(instance);
+    });
+
+    return;
+  }
 
   let draggablesToBlock = [];
   if (machineName === 'H5P.DragText') {
@@ -2349,33 +2395,13 @@ CoursePresentation.prototype.kidsloopPreventDragging = function (instance) {
     draggablesToBlock = instance.sequencingCards.map(card => card.$card.get(0));
   }
   else if (machineName === 'H5P.JigsawPuzzleKID') {
-    // Tiles will not be instantly accessible when attached
-    instance.once('reset', () => {
-      draggablesToBlock = instance.content.tiles.map(tile => tile.instance.getDOM());
-      this.kidsloopAddPreventDraggingListeners(draggablesToBlock);
-    });
+    draggablesToBlock = instance.content.tiles.map(tile => tile.instance.getDOM());
   }
   else if (machineName === 'H5P.InteractiveVideo') {
-    // Slider handle is a draggable
-    instance.on('controls', () => {
-      const $sliderHandle = instance.$controls.find('.ui-slider-handle');
-      if ($sliderHandle) {
-        this.kidsloopAddPreventDraggingListeners([$sliderHandle.get(0)]);
-      }
-    });
+    draggablesToBlock = [instance.$controls.find('.ui-slider-handle').get(0)];
 
     instance.interactions.forEach(interaction => {
-      const instance = interaction.getInstance();
-
-      if (instance.libraryInfo && instance.libraryInfo.machineName === 'H5P.DragQuestion') {
-        // Elements will only be created once the instance is attached to the DOM
-        interaction.once('display', () => {
-          this.kidsloopPreventDragging(instance);
-        });
-      }
-      else {
-        this.kidsloopPreventDragging(instance);
-      }
+      this.kidsloopPreventDragging(interaction.getInstance());
     });
   }
 
