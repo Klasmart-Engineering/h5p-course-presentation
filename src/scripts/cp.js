@@ -2377,6 +2377,11 @@ CoursePresentation.prototype.kidsloopPreventDragging = function (instance) {
 
   // Retry once when content type is resized (should happen when it was attached to the DOM)
   if (!this.isReadyForPreventDragging(instance)) {
+
+    if (!instance.once) {
+      return; // Could be pseudo instance like GoToSlide
+    }
+
     instance.once('resize', () => {
       this.kidsloopPreventDragging(instance);
     });
