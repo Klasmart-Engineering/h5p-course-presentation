@@ -2344,6 +2344,7 @@ CoursePresentation.prototype.isReadyForPreventDragging = function (instance) {
   else if (machineName === 'H5P.DragQuestion') {
     return instance.draggables !== undefined &&
       instance.draggables.length > 0 &&
+      instance.draggables[0] !== undefined &&
       instance.draggables[0].element !== undefined &&
       instance.draggables[0].element.$ !== undefined;
   }
