@@ -490,7 +490,9 @@
 .h5p-course-presentation .h5p-interactivevideo-button,
 .h5p-course-presentation .h5p-truefalse-button,
 .h5p-course-presentation .h5p-jigsawpuzzlekid-button,
-.h5p-course-presentation .h5p-essay-button {
+.h5p-course-presentation .h5p-essay-button,
+.h5p-course-presentation .h5p-audiorecorder-button,
+.h5p-course-presentation .h5p-imagepair-button {
   background: #981d99;
   border-color: #e489f3; /* Used by focus effect */
 }
@@ -507,7 +509,9 @@
 .h5p-course-presentation .h5p-interactivevideo-button:hover,
 .h5p-course-presentation .h5p-truefalse-button:hover,
 .h5p-course-presentation .h5p-jigsawpuzzlekid-button:hover,
-.h5p-course-presentation .h5p-essay-button:hover {
+.h5p-course-presentation .h5p-essay-button:hover
+.h5p-course-presentation .h5p-audiorecorder-button:hover
+.h5p-course-presentation .h5p-imagepair-button:hover {
   background: #661366;
 }
 
@@ -581,6 +585,10 @@
   content: "\f0f6";
   padding-left: 0.2em;
   padding-top: 0.1em;
+}
+
+.h5p-course-presentation .h5p-imagepair-button:before {
+  content: "\f0db";
 }
 
 .h5p-course-presentation .h5p-dragquestion-button:before {
