@@ -43,6 +43,18 @@
                       "label": "배경 불투명도"
                     },
                     {
+                      "description": "Set a custom image for the audio button (play).",
+                      "label": "Custom image (play)"
+                    },
+                    {
+                      "description": "Set a custom image for the audio button (pause). This will only have an effect if a custom image for \"play\" is set.",
+                      "label": "Custom image (pause)"
+                    },
+                    {
+                      "description": "Set a custom image for the audio button (play when paused). This will only have an effect if a custom image for \"play\" is set.",
+                      "label": "Custom image (play when paused)"
+                    },
+                    {
                       "label": "버튼으로 표시"
                     },
                     {
@@ -55,6 +67,9 @@
                           "label": "크게"
                         }
                       ]
+                    },
+                    {
+                      "label": "Custom button image"
                     },
                     {
                       "label": "제목"

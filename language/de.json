@@ -25,6 +25,18 @@
                       "label": "Hintergrunddeckkraft"
                     },
                     {
+                      "description": "Set a custom image for the audio button (play).",
+                      "label": "Custom image (play)"
+                    },
+                    {
+                      "description": "Set a custom image for the audio button (pause). This will only have an effect if a custom image for \"play\" is set.",
+                      "label": "Custom image (pause)"
+                    },
+                    {
+                      "description": "Set a custom image for the audio button (play when paused). This will only have an effect if a custom image for \"play\" is set.",
+                      "label": "Custom image (play when paused)"
+                    },
+                    {
                       "label": "Als Button anzeigen"
                     },
                     {
@@ -37,6 +49,9 @@
                           "label": "Groß"
                         }
                       ]
+                    },
+                    {
+                      "label": "Custom button image"
                     },
                     {
                       "label": "Titel"

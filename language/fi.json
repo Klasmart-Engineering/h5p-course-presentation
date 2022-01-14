@@ -25,6 +25,18 @@
                       "label": "Taustan läpinäkyvyys 0-100 (0 = läpinäkyvä, 100 = valkoinen)"
                     },
                     {
+                      "description": "Set a custom image for the audio button (play).",
+                      "label": "Custom image (play)"
+                    },
+                    {
+                      "description": "Set a custom image for the audio button (pause). This will only have an effect if a custom image for \"play\" is set.",
+                      "label": "Custom image (pause)"
+                    },
+                    {
+                      "description": "Set a custom image for the audio button (play when paused). This will only have an effect if a custom image for \"play\" is set.",
+                      "label": "Custom image (play when paused)"
+                    },
+                    {
                       "label": "Näytä painikkeena"
                     },
                     {
@@ -37,6 +49,9 @@
                           "label": "Suuri"
                         }
                       ]
+                    },
+                    {
+                      "label": "Custom button image"
                     },
                     {
                       "label": "Otsikko"
