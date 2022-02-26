@@ -2,7 +2,7 @@
   "title": "Course Presentation (KidsLoop)",
   "contentType": "Library",
   "majorVersion": 1,
-  "minorVersion": 24,
+  "minorVersion": 25,
   "patchVersion": 0,
   "runnable": 1,
   "fullscreen": 1,
@@ -33,6 +33,11 @@
       "minorVersion": 5
     },
     {
+      "machineName": "FontKidsLoop",
+      "majorVersion": 1,
+      "minorVersion": 0
+    },
+    {
       "machineName": "H5P.JoubelUI",
       "majorVersion": 1,
       "minorVersion": 3
@@ -47,7 +52,7 @@
     {
       "machineName": "H5PEditor.CoursePresentationKID",
       "majorVersion": 1,
-      "minorVersion": 24
+      "minorVersion": 25
     }
   ]
 }
