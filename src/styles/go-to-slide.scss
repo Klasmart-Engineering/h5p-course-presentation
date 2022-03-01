@@ -9,6 +9,9 @@ $navigation-element-background-color: #0580e2;
     display: block;
     width: 100%;
     height: 100%;
+    -webkit-user-select: none;
+  	-webkit-user-drag: none;
+    user-select: none;
 
     &:not(.h5p-visible) {
       cursor: default;

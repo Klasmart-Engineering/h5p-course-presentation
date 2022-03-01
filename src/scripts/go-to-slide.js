@@ -32,6 +32,8 @@ export default class GoToSlide {
     let classes = 'h5p-press-to-go';
     let tabindex = 0;
 
+    this.isInvisible = invisible;
+
     if (invisible) {
       title = undefined;
       tabindex = -1;
@@ -87,6 +89,25 @@ export default class GoToSlide {
    */
   attach($container) {
     $container.html('').addClass('h5p-go-to-slide').append(this.$element);
+    const $element = this.$element.closest('.h5p-element');
+
+    $element.on('dragstart', () => {
+      event.preventDefault();
+    });
+    $element.on('touchstart', () => {
+      if (this.isInvisible) {
+        return;
+      }
+
+      this.$element.toggleClass('h5p-visible', false);
+    });
+    $element.on('touchend', () => {
+      if (this.isInvisible) {
+        return;
+      }
+
+      this.$element.toggleClass('h5p-visible', true);
+    });
   }
 
   /**
