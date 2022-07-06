@@ -314,6 +314,10 @@ CoursePresentation.prototype.attach = function ($container) {
   });
 
   this.on('enterFullScreen', () => {
+    // Reset KLL height limiter
+    this.$container.css('max-width', '');
+    this.$container.css('margin', '');
+
     this.$fullscreenAnnouncer.html(this.l10n.accessibilityEnteredFullscreen);
   });
 
@@ -768,6 +772,25 @@ CoursePresentation.prototype.resize = function () {
 
   if (this.ignoreResize) {
     return; // When printing.
+  }
+
+  if (!this.isEditor()) {
+    // Try to detect limit imposed by KLL platform
+    let displayLimits = (
+      this.isRoot() &&
+      H5P.KLDisplay && H5P.KLDisplay.computeDisplayLimitsKLL
+    ) ?
+      H5P.KLDisplay.computeDisplayLimitsKLL(this.$container.get(0)) :
+      null;
+
+    // Limit height if applicable
+    var slideHeight = this.$wrapper.get(0).offsetHeight;
+    if (displayLimits && slideHeight > 0) {
+      if (displayLimits.height < slideHeight) {
+        this.$container.css('max-width', displayLimits.height * this.ratio + 'px');
+        this.$container.css('margin', 'auto');
+      }
+    }
   }
 
   // Fill up all available width
