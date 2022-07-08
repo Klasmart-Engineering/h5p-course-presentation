@@ -55,13 +55,22 @@
 /* Prev slide */
 .h5p-course-presentation .h5p-footer .h5p-footer-previous-slide:before {
   font-family: 'H5PFontAwesome4';
-  content: "\f0d9";
+  /* content: "\f0d9"; */
 }
-
+.h5p-footer-button.h5p-footer-previous-slide {
+  margin-right: 40px;
+  background: #6D8199;
+  font-size: 15px;
+  justify-content: center;
+  align-items: center;
+  padding: 0px 25px;
+  width: auto !important;
+  height: auto !important;
+}
 /* Next slide */
 .h5p-course-presentation .h5p-footer .h5p-footer-next-slide:after {
   font-family: 'H5PFontAwesome4';
-  content: "\f0da";
+  /* content: "\f0da"; */
 }
 
 /* Slide counter */
@@ -371,14 +380,23 @@
   background-color: transparent;
 }
 
-.h5p-course-presentation .h5p-footer [aria-disabled="true"].h5p-footer-button {
-  visibility: hidden;
-}
-.h5p-course-presentation .h5p-footer [aria-disabled="true"].h5p-footer-button:before,
-.h5p-course-presentation .h5p-footer [aria-disabled="true"].h5p-footer-button:after {
-  color: #999;
+.h5p-course-presentation .h5p-footer [aria-disabled="true"].h5p-footer-button .previous-next-button-container {
+  background: #C4CBD0;
 }
 
 .h5p-course-presentation .h5p-footer.h5p-footer-solution-mode .h5p-footer-button {
   color: #dbd7d1;
+}
+
+.previous-next-button-container {
+  padding: 10px 22px;
+  display: flex;
+  background: #6D8199;
+  align-items: center;
+  border-radius: 25px;
+  grid-gap: 10px;
+  color: #fff;
+  font-family: "Source Sans Pro";
+  font-style: normal;
+  font-weight: 600;
 }

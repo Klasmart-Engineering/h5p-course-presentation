@@ -47,6 +47,9 @@ let CoursePresentation = function (params, id, extras) {
 
   this.l10n = $.extend({
     slide: 'Slide',
+    slideList: "Slide List",
+    previousslide: "Previous Slide",
+    nextslide: "Next Slide",
     score: 'Score',
     yourScore: 'Your score',
     maxScore: 'Max score',

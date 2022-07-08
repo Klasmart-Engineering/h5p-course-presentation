@@ -313,7 +313,7 @@ const NavigationLine = (function ($) {
       'tabindex': '-1',
       'aria-disabled': 'true'
     }).appendTo($centerFooter);
-
+    this.cp.$prevSlideButton.prevObject[0].innerHTML = "<div class='previous-next-button-container'>" + '<i class="fa fa-arrow-left" aria-hidden="true"></i>' + this.cp.l10n.prevSlide + "</div>",
     addClickAndKeyboardListeners(this.cp.$prevSlideButton, () => this.cp.previousSlide());
 
     const $slideNumbering = $('<div/>', {
@@ -358,7 +358,7 @@ const NavigationLine = (function ($) {
       'role': 'button',
       'tabindex': '0'
     }).appendTo($centerFooter);
-
+    this.cp.$nextSlideButton.prevObject[0].innerHTML = "<div class='previous-next-button-container'>" + this.cp.l10n.nextSlide + '<i class="fa fa-arrow-right" aria-hidden="true"></i></div>',
     addClickAndKeyboardListeners(this.cp.$nextSlideButton, () => this.cp.nextSlide());
 
     // *********************

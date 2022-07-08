@@ -54,16 +54,11 @@
 }
 
 /* Summary task table */
-.h5p-course-presentation .h5p-summary-task-title {
-  width: 85%;
-  text-align: left;
-  font-size: 0.75em;
-}
-
 .h5p-course-presentation .h5p-summary-task-title .h5p-slide-link {
   color: #333;
   cursor: pointer;
   text-decoration: none;
+  text-align: left;
 }
 
 .h5p-course-presentation .h5p-summary-task-title .h5p-slide-link:visited {
@@ -96,19 +91,28 @@
 
 /* ------------------------------- Summary table style -----------------------------------  */
 .h5p-course-presentation .h5p-summary-table-holder {
-  height: calc(100% - 4.5em);
-  margin: 1em;
+  height: 120vh;
+  background: #F1F5FF;
+  border-radius: 10px;
 }
+
+.h5p-summary-table-holder > div > * {
+  max-height: 85vh;
+  overflow: auto !important;
+}
+
 
 .h5p-course-presentation .h5p-summary-table-pages {
   overflow: auto;
   clear: right;
-  max-height: 86%;
-  border-bottom: 1px solid #ddd;
+}
+
+.h5p-course-presentation .h5p-summary-table-pages {
+  overflow: visible;
 }
 
 .h5p-course-presentation .h5p-score-table tbody {
-  border-top: 1px solid #ddd;
+  /* border-top: 1px solid #ddd; */
 }
 
 .h5p-course-presentation .h5p-summary-total-table {
@@ -142,8 +146,8 @@
 
 .h5p-course-presentation .h5p-score-table {
   width: 100%;
-  border-collapse: collapse;
-  border-spacing: 0px;
+  border-collapse: separate;
+  border-spacing: 0 15px;
 }
 
 .h5p-course-presentation .h5p-td {
@@ -151,7 +155,7 @@
 }
 
 .h5p-course-presentation .h5p-score-table tr:not(:last-child) {
-  border-bottom: 1px solid #ddd;
+  /* border-bottom: 1px solid #ddd; */
 }
 
 .h5p-course-presentation .h5p-td p {
@@ -170,6 +174,7 @@
 .h5p-course-presentation .h5p-summary-table-header.slide {
   text-align: left;
   padding-left: 0.42em;
+  font-family: 'Source Sans Pro';
 }
 .h5p-course-presentation .h5p-summary-table-header.score {
   text-align: right;
@@ -232,7 +237,6 @@
 
 .h5p-course-presentation .h5p-summary-slide .h5p-show-solutions:before {
   font-family: 'H5PFontAwesome4';
-  content: "\f06e";
   margin-right: 0.5em;
 }
 
@@ -240,4 +244,115 @@
   font-family: 'H5PFontAwesome4';
   content: "\f021";
   margin-right: 0.5em;
+}
+
+
+/* new css */
+.h5p-course-presentation .h5p-summary-task-title {
+  padding: 10px;
+  grid-gap: 20px;
+  display: grid;
+  grid-template-columns: 30% auto;
+
+  text-align: center;
+  font-size: 0.75em;
+  background: #FFFFFF;
+  border-radius: 10px;
+}
+
+.h5p-course-presentation .h5p-summary-task-Screenshot {
+  /* background: url(image); */
+  border-radius: 10px;
+  width: 100%;
+}
+
+.h5p-course-presentation .h5p-summary-task-Slideframe {
+  padding: 4px 14px;
+  background: #5A86EE;
+  border-radius: 20px;
+  display: inline-block;
+}
+.h5p-summary-blank-screenshot {
+  color: #FFFFFF;
+  width:100%;
+  height:100%;
+  border-radius:6px;
+  background: #5A86EE;
+  display:flex;
+  justify-content: center;
+  align-items: center;
+  font-family: 'Source Sans Pro';
+  font-weight: 400;
+  font-size: 20px;
+}
+
+.h5p-course-presentation .h5p-footer .h5p-footer-center-adjusted {
+  display: flex;
+  justify-content: space-between;
+  left: 80px;
+  right: 80px;
+  z-index: 999;
+  margin-top: -80px;
+  position: absolute;
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #f1f1f1; 
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #888; 
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #555; 
+}
+
+.h5p-footer-button.h5p-footer-previous-slide {
+  margin-right: 40px;
+  background: #6D8199;
+  font-size: 15px;
+  justify-content: center;
+  align-items: center;
+  padding: 0px 25px;
+  width: auto !important;
+  height: auto !important;
+}
+
+/* Footer buttons */
+.h5p-course-presentation .h5p-footer .h5p-footer-button {
+  display: inline-block;
+  background: transparent;
+  border: 0;
+  color: #555;
+  cursor: pointer;
+  height: 1.4em;
+  width: 1.4em;
+  line-height: 1.4em;
+  margin: 0.2em 0.4em;
+  text-align: center;
+  -webkit-transition: color 0.2s ease-in-out;
+  -moz-transition: color 0.2s ease-in-out;
+  transition: color 0.2s ease-in-out;
+}
+
+
+.h5p-course-presentation .h5p-footer .h5p-footer-button:hover {
+  color: #000;
+}
+
+.h5p-course-presentation .h5p-footer .h5p-footer-button:focus {
+  outline: 2px solid #79abfd;
+  background-color: rgba(121, 171, 253, 0.2);
+}
+
+.using-mouse .h5p-course-presentation .h5p-footer .h5p-footer-button.h5p-footer-toggle-keywords:focus {
+  background-color: transparent;
 }

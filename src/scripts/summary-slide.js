@@ -1,6 +1,10 @@
 import { jQuery as $, JoubelUI } from './globals';
 import {addClickAndKeyboardListeners} from "./utils";
-
+window.onload = function () {
+  if (localStorage.getItem("screenshots")) {
+      localStorage.removeItem("screenshots")
+  }
+}
 const SummarySlide = (function () {
 
   /**
@@ -95,6 +99,23 @@ const SummarySlide = (function () {
 
     // Button container ref
     var $summaryFooter = $('.h5p-summary-footer', that.$summarySlide);
+    var $slidenavigation = $('.h5p-summary-navigation', that.$summarySlide);
+
+   //retry button
+    if (this.cp.showSummarySlideRetryButton) {
+      JoubelUI.createButton({
+        'class': 'h5p-cp-retry-button',
+        html: that.cp.l10n.retry,
+        on: {
+          click: function () {
+            that.cp.resetTask();
+            // event.preventDefault();
+          }
+        },
+        appendTo: $summaryFooter
+      });
+    }
+
 
     // Show solutions button
     if (this.cp.showSummarySlideSolutionButton) {
@@ -109,22 +130,32 @@ const SummarySlide = (function () {
         },
         appendTo: $summaryFooter
       });
+          //Previous slide button
+    JoubelUI.createButton({
+      class: "h5p-cp-previous-button",
+      html: that.cp.l10n.previousslide,
+      on: {
+        click: function () {
+          that.cp.previousSlide();
+        },
+      },
+      appendTo: $slidenavigation,
+    });
+
+
+    //Next slide button
+    JoubelUI.createButton({
+      class: "h5p-cp-next-button",
+      html: that.cp.l10n.nextslide,
+      on: {
+        click: function () {
+          that.cp.nextSlide();
+        },
+      },
+      appendTo: $slidenavigation,
+    });
     }
 
-    // Show solutions button
-    if (this.cp.showSummarySlideRetryButton) {
-      JoubelUI.createButton({
-        'class': 'h5p-cp-retry-button',
-        html: that.cp.l10n.retry,
-        on: {
-          click: function () {
-            that.cp.resetTask();
-            // event.preventDefault();
-          }
-        },
-        appendTo: $summaryFooter
-      });
-    }
 
     // Only make export button if there is an export area in CP
     if (that.cp.hasAnswerElements) {
@@ -157,10 +188,17 @@ const SummarySlide = (function () {
     var that = this;
     var totalScore = 0;
     var totalMaxScore = 0;
+    var total = 0;
+    var score = 0;
+    var percentage = 0;
+    var percentage_pie = 0; 
     var tds = ''; // For saving the main table rows
     var i;
     var slidePercentageScore = 0;
     var slideDescription = '';
+    var total_display = 0;
+    var score_display = 0;
+    var screenshots = JSON.parse(localStorage.getItem("screenshots"));
     for (i = 0; i < slideScores.length; i += 1) {
       slideDescription = self.getSlideDescription(slideScores[i]);
 
@@ -169,21 +207,45 @@ const SummarySlide = (function () {
       if (isNaN(slidePercentageScore)) {
         slidePercentageScore = 0;
       }
-      tds +=
-        '<tr>' +
-          '<td class="h5p-td h5p-summary-task-title">' +
-            '<a href="#" class="h5p-slide-link"  aria-label=" ' +
-              that.cp.l10n.slide + ' ' + slideScores[i].slide + ': ' + (slideDescription.replace(/(<([^>]+)>)/ig, "")) + ' ' +
-              slidePercentageScore + '%' +
-              '" data-slide="' +
-              slideScores[i].slide + '">' + that.cp.l10n.slide + ' ' + slideScores[i].slide + ': ' + (slideDescription.replace(/(<([^>]+)>)/ig, "")) +
-            '</a>' +
-          '</td>' +
-          '<td class="h5p-td h5p-summary-score-bar">' +
-            '<p class="hidden-but-read">' + slidePercentageScore + '%' + '</p>' +
-            '<p>' + slideScores[i].score + '<span>/</span>' + slideScores[i].maxScore + '</p>' +
-          '</td>' +
-        '</tr>';
+      total = slideScores[i].maxScore;
+      total_display = total_display + slideScores[i].maxScore;
+      score = slideScores[i].score,
+      score_display = score_display + slideScores[i].score,
+      percentage_pie = score_display / total_display,
+      percentage = score / total,
+      percentage = percentage * 100,
+      percentage_pie = percentage_pie * 100,
+        tds += `<tr><td class="h5p-td h5p-summary-task-title"><div style="max-width:200px;">` + (screenshots !== null && screenshots.find(o => o.id === slideScores[i].slide) !== undefined ? `<img class="h5p-td h5p-summary-task-Screenshot" src="${screenshots.find(o => o.id === slideScores[i].slide).url}"/>` : `<div class="h5p-summary-blank-screenshot">Slide ${i + 1}</div>`) +
+              `</div><a href="#" class="h5p-slide-link"  aria-label=" ` +
+
+              that.cp.l10n.slide +
+              " " +
+              slideScores[i].slide +
+              ": " +
+              slideDescription.replace(/(<([^>]+)>)/gi, "") +
+              " " +
+              slidePercentageScore +
+              '%" data-slide="' +
+              slideScores[i].slide +
+              '">' +
+              '<div class="h5p-td h5p-summary-task-Slideframe">' +
+              '<div class="h5p-td h5p-summary-task-Slidename">' +
+              that.cp.l10n.slide +
+              " " +
+              slideScores[i].slide +
+              " " +
+              '</div>' +
+              '</div>' +
+              '<div class="h5p-td h5p-summary-task-queryname">' +
+              slideDescription.replace(/Untitled/g, "") +
+              `<div class="h5p-summary-progress">
+            <span class="image-righticon" style="margin:0px"></span>
+              <div ><p style='color: #40B8F4;'>`+ score + `</p></div>
+            <div style='width: 117px;height: 8px; margin-left: 5px;left: 280.38px;top: 104px;background:  #EF0061;border-radius: 10px;'><div style='height: 8px;left: 418px;top: 150px;background: #40B8F4;transform: rotate(180deg);width:${percentage.toFixed(2)}%;  border-top-right-radius: .5em;border-bottom-right-radius: .5em;'></div></div>
+            <div ><p style='color: #EF0061;margin-left:5px'>`+ (total - score) + `</p></div>
+            </div>`+
+              '</div>' +
+              '</a></td></tr>';
       totalScore += slideScores[i].score;
       totalMaxScore += slideScores[i].maxScore;
     }
@@ -195,30 +257,52 @@ const SummarySlide = (function () {
     var googleContainer = (that.cp.enableGoogleShare == true) ? '<span class="h5p-summary-google-message" aria-label="' + that.cp.l10n.shareGoogle + '"></span>' : '';
 
     var html =
-      '<div class="h5p-summary-table-holder">' +
-        '<div class="h5p-summary-table-pages">' +
-          '<table class="h5p-score-table">' +
-            '<thead><tr>' +
-              '<th class="h5p-summary-table-header slide">' + that.cp.l10n.slide + '</th>' +
-              '<th class="h5p-summary-table-header score">' + that.cp.l10n.score + '<span>/</span>' + that.cp.l10n.total.toLowerCase() + '</th>' +
-            '</tr></thead>' +
-            '<tbody>' + tds + '</tbody>' +
-          '</table>' +
-        '</div>' +
-        '<div class="h5p-summary-total-table">' +
+      '<div class="h5p-summary-table-holder"><div style="display: flex;">' +
+        
+        '<div class="h5p-summary-total-table" style="width:45%;">' +
           '<div class="h5p-summary-social">' +
             shareResultContainer +
             facebookContainer +
             twitterContainer +
             googleContainer +
           '</div>' +
-          '<div class="h5p-summary-total-score">' +
-            '<p>' + that.cp.l10n.totalScore + '</p>' +
-          '</div>' +
-        '</div>' +
-      '</div>' +
-      '<div class="h5p-summary-footer">' +
-      '</div>';
+          `<div class="h5p-summary-piescore"> 
+                                <div class="pie" style="--p:${percentage_pie.toFixed(2)};--c:#40B8F4;--b:10px;">
+                                 <p style='font-weight: 300;margin:0px;font-size: 15px;line-height: 70px;'>Score</p>
+                                    <span class="image-Vector"></span>
+                                      <div>
+                                           <p style='color: #40B8F4;margin:0px;font-weight: 400;font-size: 40px;line-height: 50px;'>`+ score_display + `</p>
+                                      </div></div>
+                                <div class="h5p-summary-totalscoredisplay">
+
+                                <div class="column" style='float:left'>
+                                <p style='font-weight: 300;margin:0px;font-size: 20px;line-height: 30px;'>Total</p>
+                                <p style='color: #333333;margin:0px;font-weight: 400;font-size: 40px;line-height: 50px;'>`+ total_display + `</p>
+                                </div>
+
+                                <span class="h5p-summary-divider"></span>
+                              <div class="column" style='float:left; '>
+                                <p style='font-weight: 300;margin:0px;font-size: 20px;line-height: 30px;'>Correct</p>
+                                <p style='color: #40B8F4;margin:0px;font-weight: 400;font-size: 40px;line-height: 50px;'>`+ score_display + `</p>
+                                </div>
+
+                                <span class="h5p-summary-divider"></span>
+                              <div class="column" style='float:left; '>
+                                <p style='font-weight: 300;margin:0px;font-size: 20px;line-height: 30px;'>Incorrect</p>
+                                <p style='color: #EF0061;margin:0px;font-weight: 400;font-size: 40px;line-height: 50px;'>`+ (total_display - score_display) + `</p>
+                              </div>
+                              
+                    </div><div>` +
+      '<div class="h5p-summary-footer" ></div></div>'+
+      `</div></div>
+      <div class="h5p-summary-table-pages"  style='width:55%;'><table class="h5p-score-table" ><thead><tr><th class="h5p-summary-table-header slide">` +
+      that.cp.l10n.slideList +
+      '</th><th class="h5p-summary-table-header score">' +
+
+      "</th></tr></thead><tbody>" +
+      tds +
+      `</tbody></table></div>
+      </div></div>`;
 
     return html;
   };
