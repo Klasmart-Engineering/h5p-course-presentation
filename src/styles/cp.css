@@ -35,7 +35,7 @@
 .h5p-course-presentation p {
   line-height: 150%;
   padding: 0.5em;
-  font-family: 'Source Sans Pro'; 
+  font-family: 'Roboto', sans-serif; 
 }
 
 .h5p-course-presentation {
@@ -902,11 +902,6 @@
   content: none;
 }
 
-.h5p-course-presentation .h5p-course-presentation-custom-audio-button-image {
-  height: 100%;
-  width: 100%;
-}
-
 .h5p-course-presentation .h5p-go-to-slide {
   z-index: 2;
 }
@@ -1127,7 +1122,7 @@
 .h5p-course-presentation .h5p-summary-task-Slidename {
   width: 60px;
   height: 20px;
-  font-family: 'Source Sans Pro';
+  font-family: 'Roboto', sans-serif;
   font-style: normal;
   font-weight: 400;
   font-size: 17px;
@@ -1141,7 +1136,7 @@
 }
 
 .h5p-course-presentation .h5p-summary-task-queryname {
-  font-family: 'Source Sans Pro';
+  font-family: 'Roboto', sans-serif;
   font-style: normal;
   font-weight: 400;
   font-size: 28px;
@@ -1218,6 +1213,24 @@
   width: 100%;
   position: relative;
   margin-top: 1em;
+  width:45%;
+}
+
+.h5p-course-presentation .h5p-summary-displayScore {
+  font-weight: 300;
+  margin:0px;
+  font-size: 15px;
+  line-height: 70px;
+}
+
+
+
+.h5p-course-presentation .h5p-summary-pieScore {
+  color: #40B8F4;
+  margin:0px;
+  font-weight: 400;
+  font-size: 40px;
+  line-height: 50px;
 }
 
 .h5p-course-presentation .h5p-summary-total-table p {
@@ -1405,17 +1418,6 @@
   display: inline-block;
 }
 
-.h5p-footer-button.h5p-footer-previous-slide {
-  margin-right: 40px;
-  background: #6D8199;
-  font-size: 15px;
-  justify-content: center;
-  align-items: center;
-  padding: 0px 25px;
-  width: auto !important;
-  height: auto !important;
-}
-
 .h5p-footer-button.h5p-footer-next-slide {
   margin-right: 40px;
   background: #6D8199;
@@ -1598,6 +1600,7 @@
   background-size: 0.4em 2.6em;
   margin-left: auto;
   margin-right: auto;
+  margin:0px;
 }
 
 
@@ -1795,6 +1798,7 @@
 
   .h5p-course-presentation .h5p-summary-table-pages {
     overflow: visible;
+    width:55%;
   }
 
   .h5p-course-presentation .h5p-summary-twitter-message {
@@ -1912,6 +1916,35 @@
   align-items: center;
 }
 
+.h5p-summary-scorecolor {
+  color: #40B8F4;
+}
+
+.h5p-summary-progressBarOuter {
+  width: 117px;
+  height: 8px;
+  margin-left: 5px;
+  left: 280.38px;
+  top: 104px;
+  background:  #EF0061;
+  border-radius: 10px;
+}
+
+.h5p-summary-progressBarInner {
+  height: 8px;
+  left: 418px;
+  top: 150px;
+  background: #40B8F4;
+  transform: rotate(180deg);
+  border-top-right-radius: .5em;
+  border-bottom-right-radius: .5em;
+}
+
+.h5p-summary-totalscoreProgress {
+  color: #EF0061;
+  margin-left:5px
+}
+
 .h5p-summary-totalscore {
   color: #EF0061;
   margin-left:8px
@@ -1961,7 +1994,7 @@
 }
 
 .h5p-cp-retry-button, .h5p-show-solutions {
-  font-family: 'Source Sans Pro';
+  font-family: 'Roboto', sans-serif;
     font-size: 15px;
     justify-content: center;
     align-items: center;

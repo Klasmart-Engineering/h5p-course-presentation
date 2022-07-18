@@ -91,7 +91,8 @@
 
 /* ------------------------------- Summary table style -----------------------------------  */
 .h5p-course-presentation .h5p-summary-table-holder {
-  height: 120vh;
+  height: 100%;
+  margin: 1em;
   background: #F1F5FF;
   border-radius: 10px;
 }
@@ -113,18 +114,6 @@
 
 .h5p-course-presentation .h5p-score-table tbody {
   /* border-top: 1px solid #ddd; */
-}
-
-.h5p-course-presentation .h5p-summary-total-table {
-  width: 100%;
-  position: relative;
-  margin-top: 1em;
-}
-
-.h5p-course-presentation .h5p-summary-total-table p {
-  font-weight: bold;
-  display: inline;
-  margin-right: 1em;
 }
 
 .h5p-course-presentation .h5p-summary-total-score {
@@ -174,7 +163,7 @@
 .h5p-course-presentation .h5p-summary-table-header.slide {
   text-align: left;
   padding-left: 0.42em;
-  font-family: 'Source Sans Pro';
+  font-family: 'Roboto', sans-serif;
 }
 .h5p-course-presentation .h5p-summary-table-header.score {
   text-align: right;
@@ -246,22 +235,22 @@
   margin-right: 0.5em;
 }
 
-
-/* new css */
 .h5p-course-presentation .h5p-summary-task-title {
   padding: 10px;
   grid-gap: 20px;
   display: grid;
   grid-template-columns: 30% auto;
-
   text-align: center;
   font-size: 0.75em;
   background: #FFFFFF;
   border-radius: 10px;
 }
 
+.h5p-course-presentation .h5p-summary-task-layout {
+  max-width:200px;
+}
+
 .h5p-course-presentation .h5p-summary-task-Screenshot {
-  /* background: url(image); */
   border-radius: 10px;
   width: 100%;
 }
@@ -281,7 +270,7 @@
   display:flex;
   justify-content: center;
   align-items: center;
-  font-family: 'Source Sans Pro';
+  font-family: 'Roboto', sans-serif;
   font-weight: 400;
   font-size: 20px;
 }
@@ -313,17 +302,6 @@
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
   background: #555; 
-}
-
-.h5p-footer-button.h5p-footer-previous-slide {
-  margin-right: 40px;
-  background: #6D8199;
-  font-size: 15px;
-  justify-content: center;
-  align-items: center;
-  padding: 0px 25px;
-  width: auto !important;
-  height: auto !important;
 }
 
 /* Footer buttons */

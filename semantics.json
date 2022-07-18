@@ -402,6 +402,13 @@
         "default": "Slide"
       },
       {
+        "name": "slideList",
+        "type": "text",
+        "label": "Translation for \"Slide List\"",
+        "importance": "low",
+        "default": "Slide List"
+      },
+      {
         "name": "score",
         "type": "text",
         "label": "Translation for \"Score\"",
