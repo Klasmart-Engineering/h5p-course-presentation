@@ -1942,7 +1942,7 @@
 
 .h5p-summary-totalscoreProgress {
   color: #EF0061;
-  margin-left:5px
+  margin-left:5px !important;
 }
 
 .h5p-summary-totalscore {

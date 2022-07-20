@@ -1,7 +1,25 @@
 import { jQuery as $, JoubelUI } from './globals';
 import { addClickAndKeyboardListeners } from "./utils";
 
-
+var imag = [];
+H5P.externalDispatcher.on('exportFile', (event) => {
+  let url = URL.createObjectURL(event.data.blob);
+  imag.push({
+    id: event.data.subContentId,
+    url: url
+  });
+  let check = false;
+  imag.forEach(item => {
+    if (item.id === event.data.subContentId) {
+      check = true;
+      return false;
+    }
+  });
+  if (!check) {
+    imag.push({ id: event.data.subContentId, url: url });
+  }
+ 
+});
 const SummarySlide = (function () {
 
   /**
@@ -201,13 +219,8 @@ const SummarySlide = (function () {
     var summaryTaskLayout ;
     var summarySlideLink;
     var summarySlideProgress;
-    try {
-      var screenshots = JSON.parse(localStorage.getItem('cp_slides_screenshots_with_id'));
-    }
-    catch (error) {
-      screenshots = [];
-    }
-   
+    var screenshots = imag;
+    var contentId ;
     for (i = 0; i < slideScores.length; i += 1) {
       slideDescription = self.getSlideDescription(slideScores[i]);
 
@@ -216,6 +229,12 @@ const SummarySlide = (function () {
       if (isNaN(slidePercentageScore)) {
         slidePercentageScore = 0;
       }
+      if (that.cp.elementInstances[i][0].choices !== undefined) {
+        contentId = that.cp.elementInstances[i][0].choices[0].options.subContentId;
+      }
+      else {
+        contentId = that.cp.elementInstances[i][0].subContentId;
+      }
       total = slideScores[i].maxScore;
       total_display = total_display + total;
       score = slideScores[i].score,
@@ -223,9 +242,10 @@ const SummarySlide = (function () {
       percentage_pie = score_display / total_display * 100,
       percentage = score / total * 100,
       summaryTaskLayout = `<div class="h5p-summary-task-layout">` +
-                                (screenshots !== null && screenshots.find(o => o.id === slideScores[i].slide) !== undefined ?
-                                  `<img class="h5p-td h5p-summary-task-Screenshot" src="${screenshots.find(o => o.id === slideScores[i].slide).url}"/>` :
-                                  `<div class="h5p-summary-blank-screenshot">Slide ${i + 1}</div>`) +
+                                 
+                                (screenshots !== null && screenshots.find(o => o.id === contentId) !== undefined  ?
+                                  `<img class="h5p-td h5p-summary-task-Screenshot" src="${screenshots.find(o => o.id === contentId).url}"/>` :
+                                  `<div class="h5p-summary-blank-screenshot">Slide ${i + 1}</div>`) + 
                             `</div>`;
       summarySlideLink = '<a href="#" class="h5p-slide-link"  aria-label=" ' +
                                 that.cp.l10n.slide +
@@ -286,7 +306,7 @@ const SummarySlide = (function () {
       '</div>' +
       `<div class="h5p-summary-piescore"> 
           <div class="pie" style="--p:${percentage_pie.toFixed(2)};--c:#40B8F4;--b:10px;">
-            <p style='font-weight: 300;margin:0px;font-size: 15px;line-height: 70px;'>Score</p>
+            <p style='color:#333333;font-weight: 300;margin:0px;font-size: 15px;line-height: 70px;'>Score</p>
               <span class="image-Vector"></span>
                 <div>
                       <p style='color: #40B8F4;margin:0px;font-weight: 400;font-size: 40px;line-height: 50px;'>` + score_display + `</p>
@@ -294,19 +314,19 @@ const SummarySlide = (function () {
           <div class="h5p-summary-totalscoredisplay">
 
           <div class="column" style='float:left'>
-          <p style='font-weight: 300;margin:0px;font-size: 20px;line-height: 30px;'>Total</p>
+          <p style='color:#333333;font-weight: 300;margin:0px;font-size: 20px;line-height: 30px;'>Total</p>
           <p style='color: #333333;margin:0px;font-weight: 400;font-size: 40px;line-height: 50px;'>` + total_display + `</p>
           </div>
 
           <span class="h5p-summary-divider"></span>
         <div class="column" style='float:left; '>
-          <p style='font-weight: 300;margin:0px;font-size: 20px;line-height: 30px;'>Correct</p>
+          <p style='color:#333333;font-weight: 300;margin:0px;font-size: 20px;line-height: 30px;'>Correct</p>
           <p style='color: #40B8F4;margin:0px;font-weight: 400;font-size: 40px;line-height: 50px;'>` + score_display + `</p>
           </div>
 
           <span class="h5p-summary-divider"></span>
         <div class="column" style='float:left; '>
-          <p style='font-weight: 300;margin:0px;font-size: 20px;line-height: 30px;'>Incorrect</p>
+          <p style='color:#333333;font-weight: 300;margin:0px;font-size: 20px;line-height: 30px;'>Incorrect</p>
           <p style='color: #EF0061;margin:0px;font-weight: 400;font-size: 40px;line-height: 50px;'>` + (total_display - score_display) + `</p>
         </div>
                               
