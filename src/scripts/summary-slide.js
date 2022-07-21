@@ -29,9 +29,6 @@ const SummarySlide = (function () {
    * @constructor
    */
   function SummarySlide(coursePresentation, $summarySlide) {
-    if (localStorage.getItem('cp_slides_screenshots_with_id')) {
-      localStorage.removeItem('cp_slides_screenshots_with_id');
-    }
     // Create summary slide if not an editor
     this.$summarySlide = $summarySlide;
     this.cp = coursePresentation;
